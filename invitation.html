@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>饶晞洛 · 百日宴请柬</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap">
+<style>
+  :root{
+    --pink:#f7b8c8;
+    --pink-deep:#ef8fab;
+    --pink-dark:#cf6a8b;
+    --gold:#e8b96a;
+    --serif:'Noto Serif SC','Songti SC',serif;
+    --ink:#6f4753; --sub:#a6848e; --accent:#cf6a8b; --line:#f3d7df; --tape:#efc9d2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;}
+  body{
+    font-family:'Noto Sans SC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+    color:var(--ink);background:#fdeef2;overflow-x:hidden;
+  }
+  .page{max-width:540px;margin:0 auto;position:relative;box-shadow:0 0 50px rgba(150,110,125,.14);}
+
+  /* ===== 屏 ===== */
+  .screen{
+    height:100vh;height:100svh;
+    scroll-snap-align:start;scroll-snap-stop:always;
+    position:relative;overflow:hidden;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:calc(34px + env(safe-area-inset-top)) 16px calc(34px + env(safe-area-inset-bottom));
+    text-align:center;
+    color:var(--ink);
+  }
+  .screen > *{position:relative;z-index:2;}
+
+  /* 主题：按照片主色走 */
+  .t-cream{background:radial-gradient(circle at 50% 16%,#fffdf9 0%,#fdf2e8 52%,#f8e4d7 100%);
+    --ink:#6b5140;--sub:#a98c78;--accent:#cf6a8b;--line:#f1dfcd;--tape:#e8c9a8;}
+  .t-sand{background:linear-gradient(165deg,#fffaf3 0%,#faefe3 54%,#f2dfcd 100%);
+    --ink:#6b4a37;--sub:#a78470;--accent:#c2717f;--line:#eedbc6;--tape:#d9b48f;}
+  .t-mist{background:linear-gradient(180deg,#fcf9f8 0%,#f6f0f1 52%,#eee5e8 100%);
+    --ink:#5f545f;--sub:#95899a;--accent:#c8879a;--line:#eadfe3;--tape:#cdbcc4;}
+  .t-cocoa{background:linear-gradient(180deg,#fdf6ee 0%,#f8ecdf 56%,#f1ddcb 100%);
+    --ink:#6a4936;--sub:#a5826d;--accent:#c86f81;--line:#ecd7c0;--tape:#d5ad8a;}
+  .t-night{background:radial-gradient(circle at 62% 22%,#f5f7ff 0%,#e7eafa 46%,#d8ddf2 100%);
+    --ink:#4d5478;--sub:#8a91b0;--accent:#d788a6;--line:#ccd2ea;--tape:#b9c1e2;}
+  .t-blue{background:linear-gradient(170deg,#f8fbfd 0%,#edf2f7 56%,#dde7f0 100%);
+    --ink:#4d5a6b;--sub:#8b9aab;--accent:#c98fa0;--line:#dbe5ee;--tape:#b7c9d8;}
+  .t-pink{background:linear-gradient(180deg,#fdf3f5 0%,#fffbf7 50%,#fbe6ee 100%);
+    --ink:#6f4753;--sub:#a6848e;--accent:#cf6a8b;--line:#f3d7df;--tape:#efc9d2;}
+  .t-dusk{background:linear-gradient(180deg,#f7f3fb 0%,#f5edf4 48%,#fce9ee 100%);
+    --ink:#5b4b63;--sub:#9a8ba1;--accent:#cf6a8b;--line:#e8dcea;--tape:#cdb9d3;}
+
+  /* ===== 音乐 / 导航 ===== */
+  .music-btn{
+    position:fixed;top:calc(12px + env(safe-area-inset-top));right:12px;z-index:99;
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(255,253,251,.9);border:1.5px solid var(--pink);
+    box-shadow:0 4px 12px rgba(150,110,125,.2);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px);
+  }
+  .music-btn .disc{
+    width:28px;height:28px;border-radius:50%;
+    background:radial-gradient(circle,#fff 0 20%,var(--pink-deep) 21% 56%,var(--pink-dark) 57% 100%);
+    display:flex;align-items:center;justify-content:center;font-size:11px;
+    animation:spin 4s linear infinite;animation-play-state:paused;
+  }
+  .music-btn.playing .disc{animation-play-state:running;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .dots{position:fixed;right:7px;top:50%;transform:translateY(-50%);z-index:98;display:flex;flex-direction:column;gap:8px;}
+  .dots span{width:5px;height:5px;border-radius:50%;background:rgba(150,120,140,.25);transition:all .3s;cursor:pointer;}
+  .dots span.on{background:var(--pink-dark);height:14px;border-radius:5px;}
+
+  .progress{position:fixed;left:0;top:0;height:2.5px;z-index:99;width:0;
+    background:linear-gradient(90deg,var(--pink),var(--pink-dark));transition:width .35s ease;}
+
+  /* ===== 背景气氛 ===== */
+  .cloud{position:absolute;background:#fff;border-radius:100px;opacity:.5;filter:blur(1px);z-index:1;}
+  .cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%;}
+  .c1{width:96px;height:30px;top:7%;left:-24px;animation:drift 30s ease-in-out infinite;}
+  .c1::before{width:40px;height:40px;top:-18px;left:15px;}
+  .c1::after{width:26px;height:26px;top:-10px;left:51px;}
+  .c2{width:82px;height:25px;top:18%;right:-16px;animation:drift 38s ease-in-out infinite reverse;}
+  .c2::before{width:32px;height:32px;top:-14px;left:12px;}
+  .c2::after{width:21px;height:21px;top:-7px;left:41px;}
+  .c3{width:88px;height:28px;bottom:8%;left:-18px;opacity:.38;animation:drift 34s ease-in-out infinite;}
+  .c3::before{width:36px;height:36px;top:-16px;left:14px;}
+  .c3::after{width:24px;height:24px;top:-9px;left:47px;}
+  @keyframes drift{0%,100%{transform:translateX(0);}50%{transform:translateX(34px);}}
+
+  .sparkle{position:absolute;color:var(--accent);font-size:12px;z-index:1;animation:twinkle 2.8s ease-in-out infinite;opacity:.55;}
+  @keyframes twinkle{0%,100%{opacity:.2;transform:scale(.8) rotate(0);}50%{opacity:.95;transform:scale(1.15) rotate(8deg);}}
+
+  .star{position:absolute;z-index:1;animation:twinkle 3.6s ease-in-out infinite;}
+  .glow{position:absolute;z-index:1;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,rgba(255,253,230,.78) 0%,rgba(255,253,230,0) 68%);}
+
+  .paw{position:absolute;font-size:14px;opacity:.18;z-index:1;}
+
+  /* ===== 玲娜贝儿素材 ===== */
+  .deco{position:absolute;z-index:1;pointer-events:none;
+    filter:drop-shadow(0 8px 14px rgba(150,105,125,.2));}
+  .deco img,.sticker img,.wm img,.trio img,.end-fig img{display:block;width:100%;height:auto;}
+  .deco.f1{animation:floaty 5.4s ease-in-out infinite;}
+  .deco.f2{animation:floaty 6.8s ease-in-out infinite reverse;}
+
+  /* ===== 封面 ===== */
+  .tag{
+    font-family:'Noto Sans SC',sans-serif;letter-spacing:5px;font-size:11px;color:var(--accent);
+    background:rgba(255,255,255,.72);border:1px solid var(--line);
+    padding:5px 12px 5px 17px;border-radius:100px;margin-bottom:12px;
+  }
+  .cover-name{
+    font-family:var(--serif);font-weight:700;
+    font-size:clamp(38px,11.4vw,50px);line-height:1.22;color:var(--accent);
+    letter-spacing:10px;text-indent:10px;text-shadow:0 2px 0 #fff;
+  }
+  .cover-sub{
+    font-family:var(--serif);font-size:13px;color:var(--ink);
+    letter-spacing:4px;margin:9px 0 3px;
+  }
+  .cover-line{font-size:11px;color:var(--sub);letter-spacing:2.5px;margin-bottom:12px;}
+
+  /* ===== 照片卡 ===== */
+  .photo-card{
+    position:relative;background:#fff;padding:7px;border-radius:6px;
+    box-shadow:0 18px 34px rgba(120,85,100,.16),0 2px 6px rgba(120,85,100,.07);
+  }
+  .photo-card img.main{
+    display:block;width:100%;height:100%;object-fit:cover;border-radius:3px;
+    background:#f7f0ec;
+  }
+  .p-tall{width:min(76vw,306px);height:min(52vh,436px);transform:rotate(-1.2deg);}
+  .p-wide{width:min(94vw,444px);height:min(42vh,352px);transform:rotate(1deg);}
+  .cover-photo{width:min(70vw,300px);height:min(43vh,380px);transform:rotate(-1.5deg);margin-top:6px;}
+
+  /* 和纸胶带 */
+  .tape{position:absolute;z-index:3;width:58px;height:16px;pointer-events:none;
+    background:linear-gradient(100deg,rgba(255,255,255,.45),rgba(255,255,255,.05) 55%,rgba(255,255,255,.35));
+    background-color:var(--tape);opacity:.48;box-shadow:0 2px 4px rgba(0,0,0,.04);}
+  .tape.l{top:-9px;left:-14px;transform:rotate(-9deg);clip-path:polygon(3% 0,100% 4%,97% 100%,0 95%);}
+  .tape.r{top:-9px;right:-14px;transform:rotate(9deg);clip-path:polygon(0 4%,97% 0,100% 95%,2% 100%);}
+  .tape.b{top:auto;bottom:-9px;width:56px;height:17px;opacity:.5;}
+  .tape.bl{left:-12px;transform:rotate(7deg);clip-path:polygon(0 2%,100% 0,97% 100%,3% 96%);}
+  .tape.br{right:-12px;transform:rotate(-7deg);clip-path:polygon(3% 0,100% 3%,96% 100%,0 98%);}
+
+  /* 玲娜贝儿贴饰（落在相框边上） */
+  .sticker{position:absolute;pointer-events:none;z-index:4;
+    filter:drop-shadow(0 7px 12px rgba(150,105,125,.22));}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-8px) rotate(2deg);}}
+
+  /* ===== 文案排版 ===== */
+  .quote{
+    font-family:var(--serif);
+    font-size:clamp(15.5px,4.2vw,17.5px);line-height:2.05;color:var(--ink);
+    letter-spacing:1.6px;margin-top:26px;max-width:332px;
+    word-break:keep-all;overflow-wrap:normal;line-break:strict;
+  }
+  .quote .qmark{color:var(--accent);opacity:.6;font-size:1.05em;padding:0 2px;}
+  .quote .nm{color:var(--accent);}
+  .quote .nw{white-space:nowrap;}
+
+  .orn{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:15px;
+    color:var(--accent);opacity:.5;font-size:11px;letter-spacing:2px;}
+  .orn i{width:28px;height:1px;background:currentColor;display:block;}
+
+  .note{font-size:11px;color:var(--sub);letter-spacing:2px;margin-top:12px;line-height:1.85;
+    word-break:keep-all;line-break:strict;}
+  .page-no{
+    position:absolute;bottom:calc(14px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+    font-size:10px;letter-spacing:3px;color:var(--sub);opacity:.7;white-space:nowrap;z-index:3;
+  }
+
+  .sec-title{
+    font-family:var(--serif);font-weight:700;
+    font-size:clamp(21px,5.6vw,25px);color:var(--accent);letter-spacing:6px;text-indent:6px;margin-bottom:12px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .sec-title i{width:22px;height:1px;background:currentColor;opacity:.45;display:block;}
+  .eyebrow{font-size:10px;letter-spacing:4px;color:var(--sub);margin-bottom:8px;text-transform:uppercase;}
+
+  .scroll-hint{
+    position:absolute;bottom:calc(16px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+    font-size:10px;color:var(--sub);letter-spacing:2.5px;z-index:3;white-space:nowrap;
+    animation:hint 1.9s ease-in-out infinite;
+  }
+  @keyframes hint{0%,100%{transform:translate(-50%,0);opacity:.5;}50%{transform:translate(-50%,7px);opacity:1;}}
+
+  /* ===== 信息卡 ===== */
+  .lead{
+    font-family:var(--serif);font-size:clamp(12.5px,3.5vw,14px);
+    line-height:1.95;color:var(--ink);letter-spacing:1px;margin-bottom:14px;
+    word-break:keep-all;line-break:strict;
+  }
+  .lead .hl{color:var(--accent);}
+  .card{
+    position:relative;
+    background:rgba(255,255,255,.86);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;box-shadow:0 10px 26px rgba(150,105,125,.11);
+    backdrop-filter:blur(4px);width:100%;max-width:400px;text-align:left;
+  }
+  .info-item{display:flex;align-items:flex-start;gap:11px;padding:10px 0;}
+  .info-item + .info-item{border-top:1px dashed var(--line);}
+  .info-item .badge{
+    flex:none;width:30px;height:30px;border-radius:50%;
+    background:linear-gradient(135deg,#fbd3de,#f3a9bd);
+    display:flex;align-items:center;justify-content:center;font-size:14px;
+    box-shadow:0 3px 8px rgba(207,106,139,.18);
+  }
+  .info-item .label{font-size:9.5px;color:var(--sub);letter-spacing:2px;margin-bottom:2px;}
+  .info-item .value{font-size:clamp(12.5px,3.5vw,14px);color:var(--ink);line-height:1.65;font-family:var(--serif);}
+  .info-item .value b{font-weight:700;color:var(--accent);}
+  .card-foot{
+    margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);
+    font-size:10.5px;color:var(--sub);letter-spacing:2px;text-align:center;font-family:var(--serif);
+  }
+
+  .trio{display:flex;align-items:flex-end;justify-content:center;gap:2px;margin-top:8px;}
+  .trio img{filter:drop-shadow(0 6px 12px rgba(150,105,125,.2));}
+
+  /* ===== 结尾 ===== */
+  .end-fig{width:min(64vw,286px);margin-bottom:2px;filter:drop-shadow(0 12px 20px rgba(150,110,160,.22));animation:floaty 5.6s ease-in-out infinite;}
+  .end-words{
+    font-family:var(--serif);font-weight:700;
+    font-size:clamp(21px,5.6vw,26px);color:var(--accent);letter-spacing:5px;line-height:1.9;
+  }
+  .end-sub{font-family:var(--serif);font-size:12px;color:var(--ink);letter-spacing:2px;margin-top:10px;line-height:1.9;}
+  .end-from{font-family:var(--serif);font-size:12.5px;color:var(--sub);letter-spacing:3px;margin-top:18px;}
+  .end-from b{font-weight:700;color:var(--accent);font-size:14.5px;letter-spacing:2px;}
+  .end-paws{font-size:12px;letter-spacing:10px;opacity:.45;margin-top:14px;}
+
+  /* 点击飘心 */
+  .heart{position:fixed;pointer-events:none;z-index:97;font-size:14px;animation:rise 2.4s ease-out forwards;}
+  @keyframes rise{0%{opacity:1;transform:translateY(0) scale(.7);}100%{opacity:0;transform:translateY(-130px) scale(1.25);}}
+
+  @media (max-height:700px){
+    .p-tall{height:46vh;}
+    .p-wide{height:37vh;}
+    .cover-photo{width:min(58vw,236px);height:38vh;}
+    .quote{margin-top:18px;}
+    .orn{margin-top:10px;}
+    .end-fig{width:min(54vw,232px);}
+    .trio img{width:68px!important;}
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<audio id="bgm" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/OmWBbfbPaoFmqCxMkxkcti7An8b" loop preload="auto"></audio>
+<div class="music-btn" id="musicBtn" title="背景音乐：小美满 - 周深"><div class="disc">🎵</div></div>
+
+<div class="dots" id="dots">
+  <span class="on"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<div class="page">
+
+  <!-- ===== 01 封面 · 奶油色 ===== -->
+  <section class="screen t-cream">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <span class="sparkle" style="top:13%;left:15%;font-size:13px;">✦</span>
+    <span class="sparkle" style="top:23%;right:13%;animation-delay:.8s;font-size:11px;">✧</span>
+    <span class="sparkle" style="top:71%;left:7%;animation-delay:1.5s;font-size:12px;">✦</span>
+
+    <div class="tag">BABY 100 DAYS</div>
+    <div class="cover-name">饶晞洛</div>
+    <div class="cover-sub">百日之喜 · 敬请光临</div>
+    <div class="cover-line">一百个日夜 · 一点点小美满</div>
+
+    <div class="photo-card cover-photo">
+      <span class="tape l"></span><span class="tape r"></span>
+      <img class="main" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/VYspbKU93oqPubxYydFcXpGenyd" alt="晞洛" style="object-position:56% 40%;">
+      <div class="sticker" style="width:112px;right:-28px;top:-16px;transform:rotate(6deg);">
+        <img src="https://aka.doubaocdn.com/s/MmD4CNadqN" alt="玲娜贝儿牵爱心气球">
+      </div>
+      <div class="sticker" style="width:90px;left:-22px;bottom:-20px;transform:rotate(-8deg);">
+        <img src="https://aka.doubaocdn.com/s/8rOWdtzYVX" alt="玲娜贝儿捧花束">
+      </div>
+    </div>
+
+    <div class="deco f1" style="width:98px;right:10px;bottom:4.5%;transform:rotate(4deg);opacity:.95;">
+      <img src="https://aka.doubaocdn.com/s/qMYipuUBlm" alt="玲娜贝儿趴在云朵上">
+    </div>
+    <div class="scroll-hint">↑ 轻滑，翻一页小美好 ↑</div>
+  </section>
+
+  <!-- ===== 02 小马背上的梦 · 奶油棕 ===== -->
+  <section class="screen t-sand">
+    <div class="cloud c2"></div>
+    <span class="paw" style="bottom:15%;right:11%;transform:rotate(16deg);">🐾</span>
+
+    <div class="eyebrow">Story 01</div>
+    <div class="photo-card p-tall">
+      <span class="tape l"></span><span class="tape r"></span>
+      <img class="main" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/HK8hbkZMpoA6cbx9sRvcusN8nBd" alt="晞洛抱着小马玩偶入睡" style="object-position:50% 42%;">
+      <div class="sticker" style="width:104px;right:-24px;bottom:-20px;transform:rotate(7deg);">
+        <img src="https://aka.doubaocdn.com/s/mVVwqY8Toz" alt="玲娜贝儿抱着小羊玩偶">
+      </div>
+    </div>
+    <div class="quote"><span class="qmark">「</span>你看，小狗在叫，<br>树叶会笑，风声在呢喃<span class="qmark">」</span></div>
+    <div class="orn"><i></i><span>♡</span><i></i></div>
+    <div class="note">你把这样的温柔，也带来了一点</div>
+    <div class="page-no">— 01 / 08 —</div>
+  </section>
+
+  <!-- ===== 03 被抱住的秋天 · 雾粉灰 ===== -->
+  <section class="screen t-mist">
+    <div class="cloud c1"></div>
+    <span class="sparkle" style="top:10%;right:14%;">✧</span>
+
+    <div class="eyebrow">Story 02</div>
+    <div class="photo-card p-wide">
+      <span class="tape l"></span><span class="tape r"></span>
+      <img class="main" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/KirLb4nXBoPko6xCezacRgHvnad" alt="晞洛" style="object-position:60% 30%;">
+      <div class="sticker" style="width:96px;left:-18px;bottom:-22px;transform:rotate(-8deg);">
+        <img src="https://aka.doubaocdn.com/s/8rOWdtzYVX" alt="玲娜贝儿捧花束">
+      </div>
+    </div>
+    <div class="quote"><span class="qmark">「</span>收集一点一滴小美满，<br>皆是幸福的花样<span class="qmark">」</span></div>
+    <div class="orn"><i></i><span>♡</span><i></i></div>
+    <div class="note">被抱着的第一个秋天，笑得像两个小孩</div>
+    <div class="page-no">— 02 / 08 —</div>
+  </section>
+
+  <!-- ===== 04 百日 · 棕粉 ===== -->
+  <section class="screen t-cocoa">
+    <div class="cloud c2"></div>
+    <span class="sparkle" style="top:11%;left:14%;">✦</span>
+    <span class="paw" style="bottom:14%;left:9%;transform:rotate(20deg);">🐾</span>
+
+    <div class="eyebrow">Story 03</div>
+    <div class="photo-card p-wide">
+      <span class="tape bl"></span><span class="tape br"></span>
+      <img class="main" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/YFmKbNzVdo7sH0xtSeAcodOWnhh" alt="晞洛在玩偶小马中间安睡" style="object-position:38% 46%;">
+      <div class="sticker" style="width:106px;right:-18px;bottom:-22px;transform:rotate(7deg);">
+        <img src="https://aka.doubaocdn.com/s/MmD4CNadqN" alt="玲娜贝儿牵爱心气球">
+      </div>
+    </div>
+    <div class="quote"><span class="qmark">「</span>吾家小女<span class="nm">饶晞洛</span>，<br>喜逢百日<span class="qmark">」</span></div>
+    <div class="orn"><i></i><span>♡</span><i></i></div>
+    <div class="note">一百个日夜，一百种被爱的方式</div>
+    <div class="page-no">— 03 / 08 —</div>
+  </section>
+
+  <!-- ===== 05 月亮与星星 · 夜 ===== -->
+  <section class="screen t-night">
+    <div class="glow" style="width:330px;height:330px;top:6%;right:-92px;"></div>
+    <span class="star" style="top:9%;left:11%;font-size:13px;color:#f6e6a8;">✦</span>
+    <span class="star" style="top:16%;left:32%;font-size:9px;color:#fff8dd;animation-delay:1.2s;">✦</span>
+    <span class="star" style="top:7%;right:26%;font-size:11px;color:#e3d7ff;animation-delay:.6s;">✧</span>
+    <span class="star" style="top:27%;left:8%;font-size:10px;color:#e3d7ff;animation-delay:1.8s;">✧</span>
+    <span class="star" style="top:62%;right:9%;font-size:12px;color:#f6e6a8;animation-delay:2.4s;">✦</span>
+    <span class="star" style="bottom:16%;left:13%;font-size:9px;color:#fff8dd;animation-delay:1.5s;">✦</span>
+    <span class="paw" style="bottom:12%;right:13%;transform:rotate(-14deg);opacity:.14;">🐾</span>
+
+    <div class="eyebrow">Story 04</div>
+    <div class="photo-card p-wide">
+      <span class="tape l"></span><span class="tape r"></span>
+      <img class="main" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/HONTb44O6o8AIixf7yycc2uPnof" alt="晞洛在月亮星星背景中安睡" style="object-position:50% 46%;">
+      <div class="sticker" style="width:118px;left:-20px;bottom:-26px;transform:rotate(-6deg);">
+        <img src="https://aka.doubaocdn.com/s/EEIpi3yM5x" alt="玲娜贝儿戴睡帽安睡">
+      </div>
+    </div>
+    <div class="quote"><span class="qmark">「</span><span class="nw">月亮和星星都归你</span>，<br>好梦不必慌慌张张<span class="qmark">」</span></div>
+    <div class="orn"><i></i><span>♡</span><i></i></div>
+    <div class="note">睡吧，世界会替你一直亮着灯</div>
+    <div class="page-no">— 04 / 08 —</div>
+  </section>
+
+  <!-- ===== 06 被爱包围的第一百天 · 雾蓝 ===== -->
+  <section class="screen t-blue">
+    <div class="cloud c3"></div>
+    <span class="sparkle" style="top:9%;right:15%;">✧</span>
+
+    <div class="eyebrow">Story 05</div>
+    <div class="photo-card p-wide">
+      <span class="tape l"></span><span class="tape r"></span>
+      <img class="main" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/HUWcbSiIIoF53pxVovfc9Ti9n1c" alt="晞洛戴小熊帽的近景睡颜" style="object-position:50% 46%;">
+      <div class="sticker" style="width:108px;right:-18px;bottom:-22px;transform:rotate(5deg);">
+        <img src="https://aka.doubaocdn.com/s/qMYipuUBlm" alt="玲娜贝儿趴在云朵上">
+      </div>
+    </div>
+    <div class="quote"><span class="qmark">「</span><span class="nw">被爱包围的第一百天</span><span class="qmark">」</span></div>
+    <div class="orn"><i></i><span>♡</span><i></i></div>
+    <div class="note">你睫毛轻轻一动，心就跟着软一下</div>
+    <div class="page-no">— 05 / 08 —</div>
+  </section>
+
+  <!-- ===== 07 宴会信息 ===== -->
+  <section class="screen t-pink">
+    <div class="cloud c1"></div>
+    <span class="sparkle" style="top:9%;right:14%;">✧</span>
+    <span class="paw" style="bottom:14%;right:11%;transform:rotate(20deg);">🐾</span>
+
+    <div class="eyebrow">Party Details</div>
+    <div class="sec-title"><i></i>百日宴<i></i></div>
+    <div class="lead">
+      收集一点一滴小美满，皆是幸福的花样。<br>
+      <span class="hl">诚邀亲友赴宴，共赏这份迷迷糊糊的浪漫。</span>
+    </div>
+    <div class="card">
+      <div class="sticker" style="width:76px;right:-10px;top:-34px;transform:rotate(8deg);">
+        <img src="https://aka.doubaocdn.com/s/qOYYIgqIFT" alt="玲娜贝儿举星星棒">
+      </div>
+      <div class="info-item">
+        <div class="badge">📅</div>
+        <div>
+          <div class="label">宴会时间</div>
+          <div class="value"><b>2027年1月23日</b>（星期六）18:00</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="badge">🏨</div>
+        <div>
+          <div class="label">宴会酒店</div>
+          <div class="value">深圳星河吉酒店</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="badge">📍</div>
+        <div>
+          <div class="label">宴会厅</div>
+          <div class="value"><b>三楼 · 星澈星涧</b></div>
+        </div>
+      </div>
+      <div class="card-foot">恭候光临 · 与你共度这一晚的小美满</div>
+    </div>
+    <div class="trio">
+      <img src="https://aka.doubaocdn.com/s/8rOWdtzYVX" alt="" style="width:76px;transform:rotate(-8deg);margin-bottom:2px;">
+      <img src="https://aka.doubaocdn.com/s/mVVwqY8Toz" alt="" style="width:88px;">
+      <img src="https://aka.doubaocdn.com/s/MmD4CNadqN" alt="" style="width:80px;transform:rotate(8deg);margin-bottom:2px;">
+    </div>
+    <div class="page-no">— 06 / 08 —</div>
+  </section>
+
+  <!-- ===== 08 结尾 · 暮紫 ===== -->
+  <section class="screen t-dusk">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <span class="sparkle" style="top:16%;left:13%;">✦</span>
+    <span class="sparkle" style="top:22%;right:14%;animation-delay:.7s;">✧</span>
+    <span class="sparkle" style="bottom:23%;left:18%;animation-delay:1.3s;">✦</span>
+    <span class="sparkle" style="bottom:15%;right:22%;animation-delay:.9s;">✧</span>
+
+    <div class="deco f2" style="width:92px;left:6px;bottom:18%;transform:rotate(-7deg);opacity:.95;">
+      <img src="https://aka.doubaocdn.com/s/MmD4CNadqN" alt="玲娜贝儿牵爱心气球">
+    </div>
+    <div class="deco f1" style="width:88px;right:6px;bottom:22%;transform:rotate(6deg);opacity:.95;">
+      <img src="https://aka.doubaocdn.com/s/mVVwqY8Toz" alt="玲娜贝儿抱着小羊玩偶">
+    </div>
+
+    <div class="end-fig">
+      <img src="https://aka.doubaocdn.com/s/EEIpi3yM5x" alt="玲娜贝儿戴睡帽安睡">
+    </div>
+    <div class="end-words">小美满，是你在身边</div>
+    <div class="end-sub">静候光临，一起把这一天过成甜的</div>
+    <div class="end-from">—— <b>饶晞洛</b> 敬邀 ——</div>
+    <div class="end-paws">🐾🐾🐾</div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  var bgm = document.getElementById('bgm');
+  var btn = document.getElementById('musicBtn');
+  var playing = false;
+
+  function play(){
+    var p = bgm.play();
+    if(p && p.then){
+      p.then(function(){ playing = true; btn.classList.add('playing'); }).catch(function(){});
+    }
+  }
+  function pause(){ bgm.pause(); playing = false; btn.classList.remove('playing'); }
+  btn.addEventListener('click', function(e){ e.stopPropagation(); playing ? pause() : play(); });
+  play();
+  document.addEventListener('touchstart', function once(){
+    if(!playing) play();
+    document.removeEventListener('touchstart', once);
+  }, {passive:true});
+  document.addEventListener('click', function once(){
+    if(!playing) play();
+    document.removeEventListener('click', once);
+  });
+
+  var screens = document.querySelectorAll('.screen');
+  var dotEls = document.querySelectorAll('#dots span');
+  var progress = document.getElementById('progress');
+
+  function updateUI(){
+    var vh = window.innerHeight;
+    var idx = Math.round(window.scrollY / vh);
+    idx = Math.max(0, Math.min(screens.length - 1, idx));
+    dotEls.forEach(function(d,i){ d.classList.toggle('on', i === idx); });
+    var max = document.documentElement.scrollHeight - vh;
+    progress.style.width = (max > 0 ? Math.max(2,(window.scrollY / max) * 100) : 2) + '%';
+  }
+  window.addEventListener('scroll', updateUI, {passive:true});
+  window.addEventListener('resize', updateUI);
+  updateUI();
+
+  dotEls.forEach(function(d,i){
+    d.addEventListener('click', function(e){
+      e.stopPropagation();
+      window.scrollTo({top: i * window.innerHeight, behavior:'smooth'});
+    });
+  });
+
+  /* 点击飘心 */
+  var hearts = ['💗','💕','💖','🩷','❤️'];
+  document.addEventListener('click', function(e){
+    if(e.target.closest('.music-btn') || e.target.closest('.dots')) return;
+    var h = document.createElement('span');
+    h.className = 'heart';
+    h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+    h.style.left = (e.clientX - 7) + 'px';
+    h.style.top = (e.clientY - 7) + 'px';
+    document.body.appendChild(h);
+    setTimeout(function(){ h.remove(); }, 2400);
+  });
+})();
+</script>
+</body>
+</html>
